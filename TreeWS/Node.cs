@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace OrdenamientoArbolesBinariosCS
+namespace TreeWS
 {
 
 	public class Node

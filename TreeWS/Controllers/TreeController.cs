@@ -11,6 +11,7 @@ public class TreeController : Controller
     [HttpPost(Name = "PostTree")]
     public ActionResult<TreeModel> CreateTodoItem(TreeModel tree)
     {
+        var nuevoArbol = new Tree(tree.ListaDesordenada);
         return tree;
     }
 }
