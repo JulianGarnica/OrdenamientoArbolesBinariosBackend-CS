@@ -9,9 +9,9 @@ public class TreeController : Controller
 {
     // GET
     [HttpPost(Name = "PostTree")]
-    public ActionResult<TreeModel> CreateTodoItem(TreeModel tree)
+    public ActionResult<string> CreateTodoItem(TreeModel tree)
     {
-        var nuevoArbol = new Tree(tree.ListaDesordenada);
-        return tree;
+        Tree nuevoArbol = new Tree(tree.ListaDesordenada);
+        return nuevoArbol.devolverArbol();
     }
 }
