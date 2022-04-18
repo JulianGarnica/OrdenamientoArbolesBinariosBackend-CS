@@ -7,7 +7,7 @@ namespace TreeWS;
 [Route("[controller]")]
 public class TreeController : Controller
 {
-    // GET
+    // POST
     [HttpPost(Name = "PostTree")]
     public ActionResult<string> CreateTodoItem(TreeModel tree)
     {

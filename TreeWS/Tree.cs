@@ -77,7 +77,6 @@ namespace TreeWS
             int[] arr = Array.ConvertAll(numerosString.Split(','), s => int.Parse(s));
             int n = arr.Length;
 
-
             treeSort(arr, n); // Sort elements in ascending order
         }
 
