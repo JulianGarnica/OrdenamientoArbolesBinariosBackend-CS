@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using System.Text.Json;
 
 namespace TreeWS
@@ -11,6 +12,7 @@ namespace TreeWS
     public class Tree
     {
         public static Node arbol { get; set; }
+        public static int[] arrayOrdenado { get; set; }
 
         
         public Tree(string listaDesordenada)
@@ -78,13 +80,17 @@ namespace TreeWS
             int n = arr.Length;
 
             treeSort(arr, n); // Sort elements in ascending order
+            arrayOrdenado = arr;
         }
 
         public string devolverArbol()
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             string jsonString = JsonSerializer.Serialize(arbol, options);
-            return jsonString;
+            JObject json = JObject.Parse(jsonString);
+            json.Add("arrayOrdenado",JsonSerializer.Serialize(arrayOrdenado));
+            
+            return json.ToString();
         }
     }
 }

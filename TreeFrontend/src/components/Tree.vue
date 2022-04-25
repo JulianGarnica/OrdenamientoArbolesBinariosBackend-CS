@@ -1,19 +1,12 @@
 <template>
   <div>
     <form @submit.prevent="">
-      <input type="text" v-model="listaDesordenada" />
-      <input type="button" value="Enviar" @click="enviarListaDesordenada()" />
+      <input type="text" class="ingresoListaDesordenada" v-model="listaDesordenada" />
+      <input type="button" class="submitListaDesordenada" value="Enviar" @click="enviarListaDesordenada()" />
     </form>
-    <vue-tree
-      style="
-        width: 800px;
-        min-height: 1000px;
-        border: 1px solid gray;
-        margin: 0 auto;
-      "
-      :dataset="sampleData"
-      :config="treeConfig"
-    >
+
+    Array ordenado: {{arrayOrdenado}}
+    <vue-tree class="vue-tree1" :dataset="sampleData" :config="treeConfig">
       <template v-slot:node="{ node, collapsed }">
         <span
           class="tree-node"
@@ -26,7 +19,6 @@
 </template>
 
 <script>
-
 import VueTree from "@ssthouse/vue-tree-chart";
 import axios from "axios";
 import Vue from "vue";
@@ -39,6 +31,7 @@ export default {
       listaDesordenada: "5,3,4,2,1,6",
       sampleData: {},
       treeConfig: { nodeWidth: 120, nodeHeight: 80, levelHeight: 200 },
+      arrayOrdenado: "Nada"
     };
   },
   components: {
@@ -46,50 +39,57 @@ export default {
   },
 
   methods: {
-    enviarListaDesordenada: function (){
-
+    enviarListaDesordenada: function () {
       const headers = {
         "Content-Type": "application/json",
-        "accept": "text/plain"
-      }
+        accept: "text/plain",
+      };
 
       axios
-      .post(' http://localhost:7077/Tree',
-      {
-        "listaDesordenada":this.listaDesordenada
-      },
-      {
-        headers: headers
-      }
-      )
-      .then(response => {
-        let resultadoConsulta =  response.data;
+        .post(
+          " http://localhost:7077/Tree",
+          {
+            listaDesordenada: this.listaDesordenada,
+          },
+          {
+            headers: headers,
+          }
+        )
+        .then((response) => {
+          let resultadoConsulta = response.data;
+          this.arrayOrdenado = resultadoConsulta.arrayOrdenado;
+          delete resultadoConsulta["arrayOrdenado"]
+          // const convert= JSON.parse(JSON.stringify(resultadoConsulta),
+          // (key, value) => value === null || value === '' ? delete : value);
 
-        // const convert= JSON.parse(JSON.stringify(resultadoConsulta),
-        // (key, value) => value === null || value === '' ? delete : value);
+          let jsonToString = JSON.stringify(resultadoConsulta);
+          // let regex = /,null/g;
+          // jsonToString = jsonToString.replace(regex, "");
+          // regex = /null,/g;
+          // jsonToString = jsonToString.replace(regex, "");
+          // regex = /null/g;
+          // jsonToString = jsonToString.replace(regex, "");
 
-        let jsonToString = JSON.stringify(resultadoConsulta);
-        console.log(jsonToString)
-        let regex = /,null/g;
-        jsonToString = jsonToString.replace(regex, "");
-        regex = /null,/g;
-        jsonToString = jsonToString.replace(regex, "");
-        regex = /null/g;
-        jsonToString = jsonToString.replace(regex, "");
-        console.log(jsonToString)
+          let StringToJson = JSON.parse(jsonToString);
 
-        let StringToJson = JSON.parse(jsonToString);
-
-        console.log(StringToJson)
-        this.sampleData =StringToJson
-
-      })
-    }
-  }
+          console.log(StringToJson);
+          this.sampleData = StringToJson;
+        });
+    },
+  },
 };
 </script>
 
-<style >
+<style>
+.vue-tree1 {
+  width: 100%;
+  min-height: 1000px;
+  border: 1px solid gray;
+  border-radius: 20px;
+  top: 30px;
+  margin: 0 auto;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -98,11 +98,35 @@ export default {
 
 .tree-node {
   display: inline-block;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: antiquewhite;
+  background-color: #E63888;
+  color: white;
   text-align: center;
-  line-height: 28px;
+  line-height: 40px;
+}
+
+.ingresoListaDesordenada{
+  width: 400px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.submitListaDesordenada{
+
+  width: 100px;
+  font-size: 15px;
+  background-color: #E63888;
+  color: white;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>
